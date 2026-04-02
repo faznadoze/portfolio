@@ -1,0 +1,252 @@
+/* ═══════════════════════════════════════════════
+   AUTH — Clerk + Supabase styles
+   ═══════════════════════════════════════════════ */
+
+/* ── ESTADO DE AUTH NO BODY ──────────────────── */
+/* Preços invisíveis para usuários não logados */
+.auth-signed-out .svc-price,
+.auth-signed-out .svc-modal-price,
+.auth-signed-out .pkg-price-row,
+.auth-signed-out .pkg-price-label {
+  display: none !important;
+}
+
+/* Descrição curta nos cards (sempre visível) */
+.svc-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+/* Orçamento bloqueado */
+#orcamento {
+  position: relative;
+}
+
+.budget-lock {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 18, 18, 0.88);
+  backdrop-filter: blur(12px);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 10;
+  border-radius: 20px;
+  text-align: center;
+  padding: 40px;
+}
+
+.auth-signed-out .budget-lock {
+  display: flex;
+}
+
+.budget-lock-icon {
+  font-size: 36px;
+  margin-bottom: 4px;
+}
+
+.budget-lock-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 400;
+  letter-spacing: -0.5px;
+}
+
+.budget-lock-sub {
+  font-size: 14px;
+  color: var(--text-muted);
+  max-width: 340px;
+  line-height: 1.6;
+}
+
+.budget-lock-btn {
+  background: var(--lime);
+  color: var(--dark);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 14px 32px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Space Grotesk', sans-serif;
+  margin-top: 8px;
+  transition: transform 0.2s;
+}
+
+.budget-lock-btn:hover {
+  transform: scale(1.04);
+}
+
+/* ── NAVBAR AUTH ─────────────────────────────── */
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#auth-login-btn {
+  background: transparent;
+  color: var(--light);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 10px 22px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Space Grotesk', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#auth-login-btn:hover {
+  border-color: var(--lime);
+  color: var(--lime);
+}
+
+/* User menu */
+#auth-user-menu {
+  position: relative;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 12px 4px 4px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: border-color 0.2s;
+}
+
+#auth-user-menu:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+#auth-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--gray2);
+  display: block;
+}
+
+#auth-user-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--light);
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Dropdown */
+#auth-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: var(--gray);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 8px;
+  min-width: 200px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 0.18s, transform 0.18s;
+  z-index: 500;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+#auth-dropdown.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.auth-dropdown-email {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 8px 12px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.auth-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+  cursor: pointer;
+}
+
+.auth-dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--light);
+}
+
+#auth-signout-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Space Grotesk', sans-serif;
+  transition: background 0.15s, color 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#auth-signout-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--light);
+}
+
+/* ── TOAST DE ORÇAMENTO ENVIADO ──────────────── */
+.orcamento-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--gray);
+  border: 1px solid rgba(218, 246, 111, 0.3);
+  border-radius: 100px;
+  padding: 12px 24px;
+  font-size: 13px;
+  color: var(--lime);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 9000;
+  white-space: nowrap;
+}
+
+.orcamento-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── RESPONSIVO ──────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-auth {
+    display: none;
+  }
+}

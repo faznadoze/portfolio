@@ -1,0 +1,112 @@
+/* ═══════════════════════════════════════════════
+   ANIMATIONS — Apple-style high-performance
+   Regra: animar SOMENTE transform e opacity
+   ═══════════════════════════════════════════════ */
+
+/* ── TEXT REVEAL ─────────────────────────────── */
+.reveal-line {
+  overflow: hidden;
+  line-height: 1.15;
+}
+
+.reveal-text {
+  display: block;
+  transform: translateY(110%);
+  will-change: transform;
+  transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0s);
+}
+
+.reveal-line.is-visible .reveal-text {
+  transform: translateY(0);
+}
+
+/* ── PARALLAX ────────────────────────────────── */
+[data-parallax] {
+  will-change: transform;
+}
+
+/* ── SCROLL SCRUBBING ────────────────────────── */
+section.scrub-section {
+  padding: 0;
+}
+
+.scrub-section {
+  height: 350vh;
+  position: relative;
+}
+
+.scrub-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.scrub-content {
+  width: 100%;
+  text-align: center;
+  will-change: transform, opacity;
+}
+
+.scrub-section [data-scrub-word] {
+  display: inline-block;
+  opacity: 0.12;
+  will-change: opacity;
+  transition: none;
+}
+
+/* ── 3D TILT ─────────────────────────────────── */
+[data-tilt-container] {
+  perspective: 1000px;
+}
+
+[data-tilt] {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-tilt]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--tilt-x, 50%) var(--tilt-y, 50%),
+    rgba(255, 255, 255, 0.08) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+[data-tilt]:hover::after {
+  opacity: 1;
+}
+
+[data-tilt]:hover {
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+}
+
+/* ── RESPONSIVE ──────────────────────────────── */
+@media (max-width: 768px) {
+  [data-parallax] {
+    will-change: auto;
+  }
+
+  .scrub-section {
+    height: auto;
+  }
+
+  .scrub-sticky {
+    position: relative;
+    height: auto;
+    padding: 100px 48px;
+  }
+}
