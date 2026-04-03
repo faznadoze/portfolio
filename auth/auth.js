@@ -79,9 +79,6 @@ window.addEventListener('load', async function () {
   const loginBtn = document.getElementById('auth-login-btn');
   if (loginBtn) loginBtn.addEventListener('click', openLogin);
 
-  const lockBtn = document.getElementById('budget-lock-btn');
-  if (lockBtn) lockBtn.addEventListener('click', openLogin);
-
   // ── 5. SIGN OUT ────────────────────────────────
   const signoutBtn = document.getElementById('auth-signout-btn');
   if (signoutBtn) {

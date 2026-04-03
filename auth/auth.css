@@ -19,29 +19,9 @@
   margin-bottom: 8px;
 }
 
-/* Orçamento bloqueado */
+/* Orçamento — sem lock, qualquer visitante pode usar */
 #orcamento {
   position: relative;
-}
-
-.budget-lock {
-  display: none;
-  position: absolute;
-  inset: 0;
-  background: rgba(18, 18, 18, 0.88);
-  backdrop-filter: blur(12px);
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 14px;
-  z-index: 10;
-  border-radius: 20px;
-  text-align: center;
-  padding: 40px;
-}
-
-.auth-signed-out .budget-lock {
-  display: flex;
 }
 
 .budget-lock-icon {

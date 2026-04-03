@@ -567,6 +567,250 @@
       height: 12px;
     }
 
+    /* ── ORCAMENTO MODAL ─────────────────────────────────── */
+    .orc-modal-ov {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 10, 0.96);
+      z-index: 1200;
+      display: flex;
+      align-items: stretch;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      overflow: hidden;
+    }
+    .orc-modal-ov.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .orc-modal-inner {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+    /* Left panel — service cards */
+    .orc-panel-left {
+      flex: 1;
+      overflow-y: auto;
+      padding: 56px 48px;
+      background: var(--dark);
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+    .orc-panel-left::-webkit-scrollbar { width: 4px; }
+    .orc-panel-left::-webkit-scrollbar-track { background: transparent; }
+    .orc-panel-left::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+    /* Right panel — form */
+    .orc-panel-right {
+      width: 380px;
+      flex-shrink: 0;
+      overflow-y: auto;
+      padding: 56px 36px;
+      background: var(--gray);
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .orc-panel-right::-webkit-scrollbar { width: 4px; }
+    .orc-panel-right::-webkit-scrollbar-track { background: transparent; }
+    .orc-panel-right::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+    .orc-close {
+      position: fixed;
+      top: 24px;
+      right: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
+      color: var(--light);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: background 0.2s, border-color 0.2s;
+      backdrop-filter: blur(8px);
+    }
+    .orc-close:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); }
+    .orc-panel-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+      line-height: 1.1;
+    }
+    .orc-panel-title em { font-style: italic; color: var(--orange); }
+    .orc-panel-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+    }
+    /* Service cards grid inside modal */
+    .orc-svc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 2px;
+    }
+    .orc-svc-card {
+      background: var(--gray);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      height: 220px;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.2s;
+      user-select: none;
+    }
+    .orc-svc-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--lime), var(--orange));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+      z-index: 3;
+    }
+    .orc-svc-card:hover::before,
+    .orc-svc-card.selected::before { transform: scaleX(1); }
+    .orc-svc-card.selected {
+      background: rgba(218,246,111,0.07);
+      outline: 1px solid rgba(218,246,111,0.25);
+    }
+    .orc-svc-card .svc-card-content { flex: 1; position: relative; z-index: 2; }
+    .orc-svc-card .svc-name { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--light); }
+    .orc-svc-card .svc-icon { width: 32px; height: 32px; margin-bottom: 14px; color: var(--lime); transition: color 0.3s; }
+    .orc-svc-card .svc-icon svg { width: 100%; height: 100%; display: block; }
+    .orc-svc-card:hover .svc-icon { color: var(--orange); }
+    .orc-svc-card.selected .svc-icon { color: var(--lime); }
+    .orc-svc-card .svc-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+    .orc-svc-check {
+      position: absolute;
+      bottom: 16px; right: 16px;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      transition: all 0.2s;
+      z-index: 3;
+    }
+    .orc-svc-card.selected .orc-svc-check {
+      background: var(--lime);
+      border-color: var(--lime);
+      color: var(--dark);
+    }
+    /* Right panel form elements */
+    .orc-side-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 22px;
+      font-weight: 400;
+      letter-spacing: -0.3px;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .orc-side-title em { font-style: italic; color: var(--lime); }
+    .orc-selected-list {
+      min-height: 60px;
+      margin-bottom: 20px;
+    }
+    .orc-sel-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--light);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .orc-sel-item button {
+      background: none; border: none;
+      color: var(--text-muted);
+      cursor: pointer; font-size: 14px;
+      padding: 0 4px;
+      transition: color 0.15s;
+      line-height: 1;
+    }
+    .orc-sel-item button:hover { color: var(--orange); }
+    .orc-sel-empty {
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 12px 0;
+      font-style: italic;
+    }
+    .orc-field-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .orc-input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      color: var(--light);
+      font-size: 13px;
+      padding: 11px 14px;
+      font-family: 'Space Grotesk', sans-serif;
+      transition: border-color 0.15s;
+      margin-bottom: 16px;
+    }
+    .orc-input::placeholder { color: var(--text-muted); }
+    .orc-input:focus { outline: none; border-color: var(--lime); }
+    .orc-input.error { border-color: var(--orange) !important; }
+    textarea.orc-input {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .orc-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin: 20px 0;
+    }
+    .orc-submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--lime);
+      color: var(--dark);
+      border: none;
+      border-radius: 100px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+      margin-top: 8px;
+    }
+    .orc-submit-btn:hover { transform: scale(1.02); }
+    .orc-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .orc-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+    @media (max-width: 768px) {
+      .orc-modal-inner { flex-direction: column; }
+      .orc-panel-left { padding: 32px 20px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+      .orc-panel-right { width: 100%; padding: 32px 20px; }
+      .orc-svc-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+      .orc-svc-card { height: 180px; padding: 18px; }
+      .orc-close { top: 16px; right: 16px; }
+    }
+
     /* SERVICE DETAIL MODAL */
     .svc-modal-ov {
       position: fixed;
@@ -1918,16 +2162,18 @@
       <a href="#orcamento">Orçamento</a>
       <a href="#contato">Contato</a>
     </div>
-    <a href="#orcamento" class="nav-cta">Fazer orçamento</a>
-    <div class="nav-auth">
-      <button id="auth-login-btn">Entrar</button>
-      <div id="auth-user-menu">
-        <img id="auth-avatar" src="" alt="Avatar">
-        <span id="auth-user-label">Conta</span>
-        <div id="auth-dropdown">
-          <div class="auth-dropdown-email" id="auth-dropdown-email"></div>
-          <a href="admin.html" class="auth-dropdown-item" id="auth-admin-link" style="display:none">📊 Dashboard admin</a>
-          <button id="auth-signout-btn">↩ Sair</button>
+    <div class="nav-right" style="display: flex; align-items: center; gap: 16px;">
+      <button class="nav-cta" onclick="openOrcamentoModal()">Fazer orçamento</button>
+      <div class="nav-auth">
+        <button id="auth-login-btn">Entrar</button>
+        <div id="auth-user-menu">
+          <img id="auth-avatar" src="" alt="Avatar">
+          <span id="auth-user-label">Conta</span>
+          <div id="auth-dropdown">
+            <div class="auth-dropdown-email" id="auth-dropdown-email"></div>
+            <a href="admin.html" class="auth-dropdown-item" id="auth-admin-link" style="display:none">📊 Dashboard admin</a>
+            <button id="auth-signout-btn">↩ Sair</button>
+          </div>
         </div>
       </div>
     </div>
@@ -2003,13 +2249,6 @@
 
   <section style="padding-top:0;padding-left:0;padding-right:0;">
     <div id="orcamento">
-      <!-- Lock overlay para usuários não logados -->
-      <div class="budget-lock">
-        <div class="budget-lock-icon">🔒</div>
-        <div class="budget-lock-title">Faça login para montar seu orçamento</div>
-        <div class="budget-lock-sub">Crie sua conta grátis para ver os preços e enviar solicitações para nosso time.</div>
-        <button class="budget-lock-btn" id="budget-lock-btn">Entrar agora</button>
-      </div>
       <div class="sec-label">Ferramenta</div>
       <div class="reveal-line">
         <h2 class="sec-title reveal-text" style="margin-bottom:10px;">Monte seu<br><em>orçamento</em></h2>
@@ -2025,10 +2264,18 @@
           <div class="summary-box">
             <div class="sum-hdr">Resumo</div>
             <div class="sum-field">
-              <label>Nome do cliente</label>
-              <input type="text" id="clientName" placeholder="Ex: Empresa XYZ">
+              <label>Seu nome</label>
+              <input type="text" id="clientName" placeholder="Ex: João Silva">
             </div>
-            <div class="sum-items" id="sumItems">
+            <div class="sum-field" style="margin-top:10px;">
+              <label>E-mail</label>
+              <input type="email" id="contactEmail" placeholder="seu@email.com">
+            </div>
+            <div class="sum-field" style="margin-top:10px;">
+              <label>WhatsApp / Telefone</label>
+              <input type="tel" id="contactPhone" placeholder="(11) 99999-9999">
+            </div>
+            <div class="sum-items" id="sumItems" style="margin-top:16px;">
               <div class="sum-empty">Nenhum serviço selecionado</div>
             </div>
             <div class="sum-div"></div>
@@ -2036,7 +2283,7 @@
               <div class="sum-tot-l">Total estimado</div>
               <div class="sum-tot-v" id="totalVal">R$ 0,00</div>
             </div>
-            <button class="btn-gen" onclick="genQuote()">Gerar orçamento</button>
+            <button class="btn-gen" onclick="requestQuote()">Enviar pedido de orçamento</button>
             <button class="btn-clr" onclick="clearAll()">Limpar tudo</button>
           </div>
         </div>
@@ -2112,18 +2359,52 @@
     <p>© 2025 Agência Doze · @faznadoze · Todos os direitos reservados</p>
   </footer>
 
-  <!-- MODAL -->
+  <!-- MODAL DE ORÇAMENTO PÚBLICO -->
+  <div class="orc-modal-ov" id="orcModal">
+    <button class="orc-close" onclick="closeOrcamentoModal()" title="Fechar">✕</button>
+    <div class="orc-modal-inner">
+
+      <!-- Painel esquerdo: cards de serviços -->
+      <div class="orc-panel-left">
+        <div class="orc-panel-title">Selecione os <em>serviços</em></div>
+        <div class="orc-panel-sub">Clique nos serviços que você precisa. Pode selecionar quantos quiser.</div>
+        <div class="orc-svc-grid" id="orcSvcGrid"></div>
+      </div>
+
+      <!-- Painel direito: resumo + formulário -->
+      <div class="orc-panel-right">
+        <div class="orc-side-title">Seu <em>pedido</em></div>
+
+        <div class="orc-field-label">Serviços selecionados</div>
+        <div class="orc-selected-list" id="orcSelectedList">
+          <div class="orc-sel-empty">Nenhum serviço selecionado ainda.</div>
+        </div>
+
+        <div class="orc-divider"></div>
+
+        <div class="orc-field-label">Seu nome *</div>
+        <input class="orc-input" id="orcName" type="text" placeholder="Ex: João Silva">
+
+        <div class="orc-field-label">E-mail *</div>
+        <input class="orc-input" id="orcEmail" type="email" placeholder="seu@email.com">
+
+        <div class="orc-field-label">WhatsApp / Telefone *</div>
+        <input class="orc-input" id="orcPhone" type="tel" placeholder="(11) 99999-9999">
+
+        <div class="orc-field-label">Observações / Detalhes</div>
+        <textarea class="orc-input" id="orcObs" placeholder="Conte mais sobre o seu projeto, prazo, referências…"></textarea>
+
+        <button class="orc-submit-btn" id="orcSubmitBtn" onclick="submitOrcamento()">Enviar pedido de orçamento</button>
+        <p class="orc-note">Entraremos em contato em até 24h pelo WhatsApp ou e-mail informado.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PREVIEW (pacotes/logados) -->
   <div class="modal-ov" id="modal">
     <div class="modal-box">
       <button class="modal-x" onclick="closeModal()">✕</button>
-      <div class="m-logo" style="margin-bottom:12px;">
-        <svg height="32" viewBox="0 0 127 86" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
-          <path
-            d="M13.0883 15.2588C14.3861 12.1383 16.1807 9.44976 18.4719 7.19334C20.7632 4.93692 23.5351 3.17659 26.7797 1.90435C30.0323 0.640119 33.5733 0 37.4108 0C41.2482 0 44.7732 0.616115 47.9938 1.85635C51.2144 3.09658 53.9863 4.8409 56.3016 7.09732C58.6249 9.35374 60.4194 12.0582 61.6852 15.2108C62.951 18.3634 63.5919 21.8281 63.5919 25.5968C63.5919 29.3655 62.959 32.8301 61.6852 35.9827C60.4194 39.1353 58.6169 41.8398 56.3016 44.0962C53.9783 46.3526 51.2063 48.1129 47.9938 49.3852C44.7732 50.6494 41.2482 51.2895 37.4108 51.2895C33.5733 51.2895 30.0403 50.6574 26.8278 49.3852C23.6072 48.121 20.8353 46.3526 18.52 44.0962C16.1967 41.8398 14.3861 39.1353 13.0883 35.9827C11.7904 32.8301 11.1415 29.3655 11.1415 25.5968C11.1415 21.8281 11.7904 18.3794 13.0883 15.2588ZM49.0673 20.4518C48.4745 18.8755 47.6253 17.5473 46.5117 16.4671C45.3981 15.3869 44.0682 14.5307 42.522 13.9146C40.9758 13.2985 39.2694 12.9864 37.4108 12.9864C35.5521 12.9864 33.8537 13.2985 32.2995 13.9146C30.7533 14.5307 29.4234 15.3949 28.3099 16.5151C27.1963 17.6273 26.3311 18.9555 25.7062 20.4998C25.0893 22.0441 24.7769 23.7484 24.7769 25.5968C24.7769 27.4451 25.0893 29.1654 25.7062 30.7417C26.323 32.318 27.1883 33.6623 28.3099 34.7745C29.4234 35.8867 30.7533 36.7508 32.2995 37.375C33.8457 37.9911 35.5521 38.3031 37.4108 38.3031C39.2694 38.3031 40.9678 37.9911 42.522 37.375C44.0682 36.7588 45.3821 35.8947 46.4716 34.7745C47.5532 33.6623 48.4024 32.334 49.0273 30.7897C49.6441 29.2454 49.9566 27.5171 49.9566 25.5968C49.9566 23.6764 49.6602 22.0281 49.0753 20.4518H49.0673ZM126.81 45.0644C126.417 43.4321 125.448 42.6079 125.448 42.6079C124.15 41.5037 122.179 41.4637 121.987 41.4557C121.987 41.4557 121.843 41.4557 121.722 41.4557C119.663 41.5437 116.859 45.8805 116.211 46.9127C114.969 48.8171 113.174 51.2815 110.683 53.866C107.518 57.1386 104.698 59.123 102.511 60.5873C95.6614 65.1801 89.044 67.7326 89.044 67.7326C78.3248 71.9574 67.902 72.3415 63.1433 72.3175C58.3845 72.2134 47.9778 71.5573 37.3707 67.0525C37.3707 67.0525 30.8254 64.324 24.1039 59.5551C21.9649 58.0348 19.1849 55.9784 16.1166 52.6258C14.4182 50.7774 13.0642 48.9931 11.9987 47.4248C11.7984 47.1288 11.5501 46.7607 11.2537 46.3046C11.2537 46.3046 11.0053 45.9205 10.773 45.5365C9.73952 43.8242 9.37901 42.2159 8.2414 41.1116C7.20793 40.1115 5.62168 39.6234 4.16361 39.8314C2.93787 40.0074 2.07265 40.6316 1.66407 40.9836C1.66407 40.9836 0.670658 41.7838 0.238044 43.4081C-1.5565 50.0493 7.38418 60.9393 7.38418 60.9393C11.1736 65.5562 18.3277 72.8375 30.5931 78.6386C37.9796 82.1273 45.0456 83.4875 48.6828 84.2237C54.3548 85.3679 59.2578 85.816 62.967 86C66.6763 85.912 71.5953 85.5919 77.2913 84.5997C80.9525 83.9596 88.0506 82.7914 95.5252 79.5028C107.943 74.0298 115.281 66.9484 119.199 62.4276C119.199 62.4276 128.428 51.7776 126.81 45.0884V45.0644ZM68.0542 31.7339V41.8398H115.409V29.5975H88.9559L113.367 5.95311H95.5332L68.0462 31.7339H68.0542Z"
-            fill="#5456D1" />
-        </svg>
-      </div>
-      <div class="m-sub">@faznadoze · Orçamento comercial</div>
+      <div class="m-sub" id="mSub">@faznadoze · Orçamento comercial</div>
       <div class="m-client" id="mClient"></div>
       <div class="m-items" id="mItems"></div>
       <div class="sum-div"></div>
@@ -2357,19 +2638,85 @@
       document.getElementById('clientName').value = '';
       updSum();
     }
-    function genQuote() {
-      const client = document.getElementById('clientName').value.trim() || 'Cliente';
+    function buildQuoteData() {
       let total = 0; const items = [];
       services.forEach(s => {
         const d = sel[s.id]; if (!d) return;
         if (s.perSec && d.sec > 0) { const sub = s.price * d.sec; total += sub; items.push({ name: `${s.name} (${d.sec}s)`, price: sub }); }
         else if (!s.perSec && d.qty > 0) { const sub = s.price * d.qty; total += sub; items.push({ name: d.qty > 1 ? `${s.name} ×${d.qty}` : s.name, price: sub }); }
       });
+      return { items, total };
+    }
+
+    function genQuote() {
+      const client = document.getElementById('clientName').value.trim() || 'Cliente';
+      const { items, total } = buildQuoteData();
       if (!items.length) { alert('Selecione pelo menos um serviço.'); return; }
       document.getElementById('mClient').textContent = 'Para: ' + client;
       document.getElementById('mItems').innerHTML = items.map(i => `<div class="m-item"><div class="m-item-n">${i.name}</div><div class="m-item-p">R$ ${i.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</div></div>`).join('');
       document.getElementById('mTotal').textContent = 'R$ ' + total.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
       document.getElementById('modal').classList.add('open');
+    }
+
+    async function requestQuote() {
+      const name  = document.getElementById('clientName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const phone = document.getElementById('contactPhone').value.trim();
+
+      if (!name)  { showFieldError('clientName',  'Informe seu nome.'); return; }
+      if (!email) { showFieldError('contactEmail', 'Informe seu e-mail.'); return; }
+      if (!phone) { showFieldError('contactPhone', 'Informe seu WhatsApp/telefone.'); return; }
+
+      const { items, total } = buildQuoteData();
+      if (!items.length) { alert('Selecione pelo menos um serviço.'); return; }
+
+      // Exibe modal de prévia
+      document.getElementById('mClient').textContent = 'Para: ' + name;
+      document.getElementById('mItems').innerHTML = items.map(i => `<div class="m-item"><div class="m-item-n">${i.name}</div><div class="m-item-p">R$ ${i.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</div></div>`).join('');
+      document.getElementById('mTotal').textContent = 'R$ ' + total.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+      document.getElementById('modal').classList.add('open');
+
+      // Salva no Supabase
+      const cfg = window.DOZE_CONFIG;
+      if (!cfg || !cfg.supabaseUrl.startsWith('https://')) return;
+      const sb = window._supabase || window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+
+      const { error } = await sb.from('orcamentos').insert({
+        client_name:    name,
+        contact_email:  email,
+        contact_phone:  phone,
+        user_email:     email,
+        user_name:      name,
+        items:          items.map(i => ({ nome: i.name, preco: 'R$ ' + i.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) })),
+        total,
+        status:         'novo',
+      });
+
+      if (!error) {
+        const toast = document.getElementById('orcamento-toast');
+        if (toast) {
+          toast.textContent = '✅ Pedido enviado! Entraremos em contato em breve.';
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+        // Fecha modal e limpa após 2s
+        setTimeout(() => { closeModal(); clearAll();
+          document.getElementById('contactEmail').value = '';
+          document.getElementById('contactPhone').value = '';
+        }, 2000);
+      } else {
+        console.error('[requestQuote] Erro:', error);
+        alert('Ocorreu um erro ao enviar. Tente novamente.');
+      }
+    }
+
+    function showFieldError(id, msg) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.style.borderColor = 'var(--orange)';
+      el.placeholder = msg;
+      el.focus();
+      el.addEventListener('input', () => { el.style.borderColor = ''; }, { once: true });
     }
     function closeModal() { document.getElementById('modal').classList.remove('open'); }
     document.getElementById('modal').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
@@ -2622,6 +2969,167 @@
 
     // init packages
     renderPkgEditor();
+
+    // ── MODAL DE ORÇAMENTO PÚBLICO ─────────────────────────────
+    const orcSelectedServices = new Set();
+
+    function openOrcamentoModal() {
+      document.getElementById('orcModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      renderOrcSvcGrid();
+      renderOrcSelected();
+    }
+
+    function closeOrcamentoModal() {
+      document.getElementById('orcModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeOrcamentoModal();
+    });
+
+    function renderOrcSvcGrid() {
+      const grid = document.getElementById('orcSvcGrid');
+      if (!grid || grid.children.length > 0) return; // só renderiza uma vez
+
+      services.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'orc-svc-card' + (orcSelectedServices.has(s.id) ? ' selected' : '');
+        card.dataset.id = s.id;
+        const shortDesc = (svcDetails[s.id] || '').slice(0, 80) + '…';
+        card.innerHTML = `
+          <div class="svc-card-content">
+            <div class="svc-icon">${svcIcons[s.id] || ''}</div>
+            <div class="svc-name">${s.name}</div>
+            <div class="svc-desc">${shortDesc}</div>
+          </div>
+          <div class="orc-svc-check">✓</div>`;
+        card.addEventListener('click', () => toggleOrcSvc(s.id, card));
+        grid.appendChild(card);
+      });
+    }
+
+    function toggleOrcSvc(id, card) {
+      if (orcSelectedServices.has(id)) {
+        orcSelectedServices.delete(id);
+        card.classList.remove('selected');
+      } else {
+        orcSelectedServices.add(id);
+        card.classList.add('selected');
+      }
+      renderOrcSelected();
+    }
+
+    function renderOrcSelected() {
+      const list = document.getElementById('orcSelectedList');
+      if (!list) return;
+      if (orcSelectedServices.size === 0) {
+        list.innerHTML = '<div class="orc-sel-empty">Nenhum serviço selecionado ainda.</div>';
+        return;
+      }
+      list.innerHTML = [...orcSelectedServices].map(id => {
+        const s = services.find(x => x.id === id);
+        if (!s) return '';
+        return `<div class="orc-sel-item">
+          <span>${s.name}</span>
+          <button onclick="removeOrcSvc('${id}')">✕</button>
+        </div>`;
+      }).join('');
+    }
+
+    window.removeOrcSvc = function(id) {
+      orcSelectedServices.delete(id);
+      const card = document.querySelector(`.orc-svc-card[data-id="${id}"]`);
+      if (card) card.classList.remove('selected');
+      renderOrcSelected();
+    };
+
+    async function submitOrcamento() {
+      const name  = document.getElementById('orcName').value.trim();
+      const email = document.getElementById('orcEmail').value.trim();
+      const phone = document.getElementById('orcPhone').value.trim();
+      const obs   = document.getElementById('orcObs').value.trim();
+
+      // Validações
+      let valid = true;
+      [['orcName', name], ['orcEmail', email], ['orcPhone', phone]].forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (!val) {
+          el.classList.add('error');
+          el.addEventListener('input', () => el.classList.remove('error'), { once: true });
+          valid = false;
+        }
+      });
+      if (!valid) return;
+
+      if (orcSelectedServices.size === 0) {
+        alert('Selecione pelo menos um serviço para continuar.');
+        return;
+      }
+
+      const btn = document.getElementById('orcSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Enviando…';
+
+      const selectedItems = [...orcSelectedServices].map(id => {
+        const s = services.find(x => x.id === id);
+        return { nome: s?.name || id, preco: '' };
+      });
+
+      const nota = obs ? `\n\nObservações: ${obs}` : '';
+
+      // Salva no Supabase
+      let saved = false;
+      const cfg = window.DOZE_CONFIG;
+      if (cfg && cfg.supabaseUrl.startsWith('https://')) {
+        const sb = window._supabase || window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+        const { error } = await sb.from('orcamentos').insert({
+          client_name:   name,
+          contact_email: email,
+          contact_phone: phone,
+          user_email:    email,
+          user_name:     name,
+          items:         selectedItems,
+          total:         0,
+          status:        'novo',
+          notes:         obs || null,
+        });
+        if (!error) {
+          saved = true;
+        } else {
+          console.error('[submitOrcamento] Erro Supabase:', error);
+          // Mostra erro detalhado para debug
+          btn.disabled = false;
+          btn.textContent = 'Enviar pedido de orçamento';
+          alert(`❌ Erro ao salvar no banco:\n\n${error.message || error.code || JSON.stringify(error)}\n\nVerifique se o SQL foi executado no Supabase e se as policies estão corretas.`);
+          return;
+        }
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Enviar pedido de orçamento';
+
+      const toast = document.getElementById('orcamento-toast');
+      if (toast) {
+        toast.textContent = saved
+          ? '✅ Pedido enviado! Entraremos em contato em breve.'
+          : '✅ Pedido registrado! Entraremos em contato.';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 4000);
+      }
+
+      // Limpa e fecha
+      orcSelectedServices.clear();
+      document.getElementById('orcSvcGrid').innerHTML = '';
+      ['orcName','orcEmail','orcPhone','orcObs'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      renderOrcSelected();
+      setTimeout(closeOrcamentoModal, 1200);
+    }
   </script>
   <div class="orcamento-toast" id="orcamento-toast">✅ Orçamento enviado para o time!</div>
   <script src="animations/animations.js" defer></script>

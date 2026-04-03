@@ -228,12 +228,15 @@
 
     .td-client { font-weight: 500; color: var(--light); }
 
-    .td-user {
+
+    .td-contact {
       font-size: 12px;
-      color: var(--text-muted);
+      color: var(--light);
+      line-height: 1.7;
     }
 
     .td-total {
+
       font-family: 'Instrument Serif', serif;
       font-size: 18px;
       letter-spacing: -0.5px;
@@ -516,6 +519,15 @@
         const statusClass = `status-${r.status || 'novo'}`;
         const statusLabel = { novo: 'Novo', visto: 'Visto', fechado: 'Fechado' }[r.status] || 'Novo';
 
+        const isGuest = !r.user_id;
+        const contactName  = r.user_name  || r.client_name || '—';
+        const contactEmail = r.contact_email || r.user_email || '';
+        const contactPhone = r.contact_phone || '';
+        const guestBadge   = isGuest
+          ? `<span style="font-size:10px;background:rgba(218,246,111,0.1);color:var(--lime);border:1px solid rgba(218,246,111,0.2);padding:2px 8px;border-radius:100px;letter-spacing:1px;">VISITANTE</span><br>`
+          : '';
+        const contactHtml = `${guestBadge}${contactName}<br><span style="color:var(--text-muted)">${contactEmail}</span>`;
+
         const itemsHtml = (r.items || []).map(i =>
           `<div class="detail-item">
             <span class="detail-item-name">${i.nome || i.name || ''}</span>
@@ -523,10 +535,17 @@
           </div>`
         ).join('');
 
+        const phoneRow = contactPhone
+          ? `<div style="margin-top:12px;font-size:13px;"><span style="color:var(--text-muted);">WhatsApp/Tel: </span><a href="https://wa.me/55${contactPhone.replace(/\D/g,'')}" target="_blank" style="color:var(--lime);text-decoration:none;font-weight:600;">${contactPhone}</a></div>`
+          : '';
+        const notesRow = r.notes
+          ? `<div style="margin-top:12px;font-size:13px;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);color:var(--text-muted);line-height:1.6;"><span style="color:var(--light);font-weight:600;">Observações:</span> ${r.notes}</div>`
+          : '';
+
         return `
           <tr onclick="toggleDetail(${idx})">
             <td class="td-client">${r.client_name || '—'}</td>
-            <td class="td-user">${r.user_name || ''}<br>${r.user_email || ''}</td>
+            <td class="td-contact">${contactHtml}</td>
             <td class="td-total">R$&nbsp;${total}</td>
             <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
             <td class="td-date">${date}</td>
@@ -540,6 +559,8 @@
             <td colspan="6">
               <div class="detail-inner" id="detail-${idx}">
                 <div class="detail-items">${itemsHtml}</div>
+                ${phoneRow}
+                ${notesRow}
               </div>
             </td>
           </tr>`;
@@ -550,7 +571,7 @@
           <thead>
             <tr>
               <th>Cliente</th>
-              <th>Usuário</th>
+              <th>Contato</th>
               <th>Total</th>
               <th>Status</th>
               <th>Data</th>
